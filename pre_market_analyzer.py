@@ -67,7 +67,7 @@ def fetch_global_markets():
     print("正在下載美股大盤及 ADR 數據...")
     for symbol, name in tickers.items():
         try:
-            df = yf.download(symbol, period='5d')
+            df = yf.download(symbol, period='5d', timeout=15)
             # 處理 yfinance 可能返回的 MultiIndex 欄位
             if isinstance(df.columns, pd.MultiIndex):
                 df.columns = df.columns.get_level_values(0)
@@ -381,7 +381,7 @@ def send_line_summary_notification(token, user_id, date_str, stats_summary, glob
             "messages": [{"type": "text", "text": line_text}]
         }
         try:
-            res = requests.post(url, headers=headers, json=payload)
+            res = requests.post(url, headers=headers, json=payload, timeout=15)
             if res.status_code == 200:
                 print(f"LINE 盤前訊息推送成功！(使用者: {uid})")
             else:
@@ -939,7 +939,7 @@ def main():
         if yesterday_close == 0.0:
             try:
                 ticker_symbol = f"{symbol}.TW"
-                df = yf.download(ticker_symbol, period='5d')
+                df = yf.download(ticker_symbol, period='5d', timeout=15)
                 if isinstance(df.columns, pd.MultiIndex):
                     df.columns = df.columns.get_level_values(0)
                 if not df.empty and len(df) >= 2:
@@ -950,7 +950,7 @@ def main():
                 else:
                     # 試上櫃
                     ticker_symbol = f"{symbol}.TWO"
-                    df = yf.download(ticker_symbol, period='5d')
+                    df = yf.download(ticker_symbol, period='5d', timeout=15)
                     if isinstance(df.columns, pd.MultiIndex):
                         df.columns = df.columns.get_level_values(0)
                     if not df.empty and len(df) >= 2:
