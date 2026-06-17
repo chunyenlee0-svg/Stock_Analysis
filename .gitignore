@@ -1,0 +1,31 @@
+# Local credential files
+config.json
+service_account.json
+token.json
+credentials.json
+
+# Python virtual environment and cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.venv/
+.env
+
+# Generated report artifacts (images and temp reports)
+*.png
+*.jpg
+*.jpeg
+temp_*.html
+*discrete_snapshot.json
+*_snapshot.json
+
+# IDE config files
+.vscode/
+.idea/
+.DS_Store

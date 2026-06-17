@@ -1,0 +1,42 @@
+name: Taiwan Stock Pre-Market Analysis
+
+on:
+  schedule:
+    # 台灣時間週一至週五早上 05:00 執行 (UTC 時間為前一天晚上 21:00)
+    # 週日 21:00 UTC 相當於週一 05:00 台灣時間
+    # 週四 21:00 UTC 相當於週五 05:00 台灣時間
+    - cron: '0 21 * * 0-4'
+  workflow_dispatch:
+    # 支援在 GitHub 網頁手動觸發執行
+
+jobs:
+  analyze-and-report:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 檢出專案代碼
+      uses: actions/checkout@v4
+
+    - name: 設定 Python 環境
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip' # 快取 pip 依賴，加速執行
+
+    - name: 安裝相依套件
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: 執行盤前分析與發送報告
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        GMAIL_USER: ${{ secrets.GMAIL_USER }}
+        GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+        LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+        GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+        GDRIVE_SERVICE_ACCOUNT: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+        GDRIVE_OAUTH_TOKEN: ${{ secrets.GDRIVE_OAUTH_TOKEN }}
+      run: |
+        python pre_market_analyzer.py
