@@ -24,6 +24,14 @@ from jinja2 import Template
 from pydantic import BaseModel, Field
 from typing import List
 
+# 全域設定：強制設定 requests 的預設連線超時時間為 15 秒，避免 yfinance 或其它 API 請求無限期卡死
+original_session_request = requests.Session.request
+def patched_session_request(self, method, url, *args, **kwargs):
+    if 'timeout' not in kwargs or kwargs['timeout'] is None:
+        kwargs['timeout'] = 15
+    return original_session_request(self, method, url, *args, **kwargs)
+requests.Session.request = patched_session_request
+
 # ==========================================
 # 1. 數據獲取與統計計算模組
 # ==========================================
