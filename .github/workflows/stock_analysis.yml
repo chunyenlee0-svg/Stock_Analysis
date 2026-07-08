@@ -1,10 +1,6 @@
 name: Taiwan Stock Post-Market Analysis
 
 on:
-  schedule:
-    # 台灣時間週一至週五下午 14:00 執行 (UTC 時間為 06:00)
-    # 為了避開 GitHub 排程整點塞車，將分鐘設為 47，小時設為 5 (相當於台灣時間 13:47，避開 14:00 整點塞車)
-    - cron: '47 5 * * 1-5'
   repository_dispatch:
     types: [trigger_post_market]
   workflow_dispatch:

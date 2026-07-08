@@ -1,10 +1,6 @@
 name: Taiwan Stock Pre-Market Analysis
 
 on:
-  schedule:
-    # 台灣時間週一至週五早上 05:00 執行 (UTC 時間為前一天晚上 21:00)
-    # 為了避開 GitHub 排程整點塞車，將分鐘設為 13
-    - cron: '13 21 * * 0-4'
   repository_dispatch:
     types: [trigger_pre_market]
   workflow_dispatch:
